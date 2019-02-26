@@ -15,6 +15,8 @@ static void list_merge(struct list_head *head,
 }
 static void list_msort(struct list_head *head)
 {
+    if (list_empty(head) || list_is_singular(head))
+        return;
     int i = 0, n = 0;
     struct listitem *entry;
     struct list_head *node = NULL;
@@ -31,7 +33,7 @@ static void list_msort(struct list_head *head)
     }
     list_cut_position(&l1, head, node);
     list_cut_position(&l2, head, head->prev);
-
+    list_merge(head, &l1, &l2);
     return;
 }
 int main(void)
