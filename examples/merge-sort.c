@@ -5,7 +5,7 @@
 
 #include "../private/common.h"
 
-static uint16_t values[256];
+static uint16_t values[6];
 
 static void list_merge(struct list_head *head,
                        struct list_head *l1,
@@ -15,6 +15,23 @@ static void list_merge(struct list_head *head,
 }
 static void list_msort(struct list_head *head)
 {
+    int i = 0, n = 0;
+    struct listitem *entry;
+    struct list_head *node = NULL;
+    struct list_head l1, l2;
+    INIT_LIST_HEAD(&l1);
+    INIT_LIST_HEAD(&l2);
+    list_for_each (node, head) {
+        n++;
+    }
+    list_for_each (node, head) {
+        i++;
+        if (i >= n / 2)
+            break;
+    }
+    list_cut_position(&l1, head, node);
+    list_cut_position(&l2, head, head->prev);
+
     return;
 }
 int main(void)
