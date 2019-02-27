@@ -52,6 +52,8 @@ static void list_msort(struct list_head *head)
     }
     list_cut_position(&l1, head, node);
     list_cut_position(&l2, head, head->prev);
+    list_msort(&l1);
+    list_msort(&l2);
     list_merge(head, &l1, &l2);
     return;
 }
