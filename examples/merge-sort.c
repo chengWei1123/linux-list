@@ -5,12 +5,31 @@
 
 #include "../private/common.h"
 
-static uint16_t values[6];
+static uint16_t values[256];
 
 static void list_merge(struct list_head *head,
                        struct list_head *l1,
                        struct list_head *l2)
 {
+    struct list_head *tmp;
+    while (1) {
+        if (list_empty(l1)) {
+            list_splice_tail(l2, head);
+            return;
+        } else if (list_empty(l2)) {
+            list_splice_tail(l1, head);
+            return;
+        }
+
+        if (container_of(l1->next, struct listitem, list)->i <=
+            container_of(l2->next, struct listitem, list)->i) {
+            tmp = l1->next;
+        } else {
+            tmp = l2->next;
+        }
+        list_del(tmp);
+        list_add_tail(tmp, head);
+    }
     return;
 }
 static void list_msort(struct list_head *head)
