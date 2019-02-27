@@ -32,19 +32,16 @@ static void list_merge(struct list_head *head,
     }
     return;
 }
-static void list_msort(struct list_head *head)
+static void list_msort(struct list_head *head, int n)
 {
     if (list_empty(head) || list_is_singular(head))
         return;
-    int i = 0, n = 0;
+    int i = 0;
     struct listitem *entry;
     struct list_head *node = NULL;
     struct list_head l1, l2;
     INIT_LIST_HEAD(&l1);
     INIT_LIST_HEAD(&l2);
-    list_for_each (node, head) {
-        n++;
-    }
     list_for_each (node, head) {
         i++;
         if (i >= n / 2)
@@ -52,8 +49,8 @@ static void list_msort(struct list_head *head)
     }
     list_cut_position(&l1, head, node);
     list_cut_position(&l2, head, head->prev);
-    list_msort(&l1);
-    list_msort(&l2);
+    list_msort(&l1, n / 2);
+    list_msort(&l2, n - n / 2);
     list_merge(head, &l1, &l2);
     return;
 }
@@ -79,7 +76,7 @@ int main(void)
     assert(!list_empty(&testlist));
 
     qsort(values, ARRAY_SIZE(values), sizeof(values[0]), cmpint);
-    list_msort(&testlist);
+    list_msort(&testlist, 256);
 
     i = 0;
     list_for_each_entry_safe (item, is, &testlist, list) {
